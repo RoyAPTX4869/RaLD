@@ -388,9 +388,6 @@ class RadarAutoencoder(nn.Module):
         return dec
     
     def _encode(self, x:torch.Tensor) -> torch.Tensor:
-        '''
-        Called by the AR model
-        '''
         inputs = x.permute(0, 4, 1, 2, 3)
         z = self.encode(inputs) # [B, embed_dim, R/d, A/d, E/d]
         return z.permute(0, 2, 3, 4, 1) # [B, R/d, A/d, E/d, embed_dim]

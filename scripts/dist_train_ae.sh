@@ -5,7 +5,7 @@ export CUDA_VISIBLE_DEVICES=0,1
  
 # if you want to eval the model, just change config file to version for eval
 
-config=configs/ae_vecset/ae_indoor_cfg_aniso_mix_view_cone.yml
+config=configs/ae/ae_indoor_cfg_aniso_mix_view_cone.yml
 n_gpus=2
 
 main_script=main_ae.py

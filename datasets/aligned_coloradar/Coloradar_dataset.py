@@ -522,22 +522,3 @@ class ColoRadarDataset(Dataset):
 
     def set_load_latent(self, use_cache_latent:bool):
         self.use_cache_latent = use_cache_latent
-
-if __name__ == "__main__":
-    import yaml
-    import tqdm
-    root_dir = Path('/data/ruijiezzz/dataset/processed_coloradar')
-    config_dir = Path('configs/ar_vecset/ar_indoor_cfg_aniso_single_layer_mix_view_cone_unfreeze_enc_ints_only_eval_2.yml')
-    with open(config_dir, 'r') as config_file:
-        config = yaml.load(config_file, yaml.FullLoader)
-    config = EasyDict(config)
-    dataset = ColoRadarDataset(root_dir, config.dataset, radar_type='scRadar', loader_type='test')
-    dataset.set_load_radar(True)
-    dataset.set_load_latent(False)
-    dataset.set_load_query(True)
-    for i,data_dict in enumerate(tqdm.tqdm(dataset)):
-        lidar_points = data_dict['lidar_points']
-        if 'cache_latent' in data_dict:
-            cache_latent = data_dict['cache_latent']
-            print(i, "/", len(dataset), cache_latent.shape)
-        # break

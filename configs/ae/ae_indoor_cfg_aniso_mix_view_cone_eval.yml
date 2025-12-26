@@ -1,26 +1,26 @@
 system: 
   device: cuda:1
-  # device: &device cuda:2
   seed: 1024
-  expname: indoor_cone_aniso_nrom_1223
-  log_dir: ./result/ckpt/ae
-  output_dir: ./result/ckpt/ae
+  expname: indoor_cone_aniso_nrom_1222
+  log_dir: ./result/eval/ae
+  output_dir: ./result/eval/ae
   distributed: &distributed false # not actually used, use torchrun to run distributed training
-  dist_eval: false
-  mode: train #train or eval
+  dist_eval: true
+  mode: eval #train or eval
 
 
 dataset:
   dataset_name: AlignedColoRadar
   root_dir: /data/ruijiezzz/dataset/processed_coloradar
-  split_file: split_indoor_june.json
-  # split_file: 
-  #   hallway: split_mini_hallway_june.json
-  #   lab: split_mini_arpg_lab_june.json
-  #   aspen: split_mini_aspen_june.json
-  #   classroom: split_mini_classroom_june.json
-  #   army: split_mini_army_june.json
+  # split_file: split_indoor_june.json
+  split_file: 
+    hallway: split_mini_hallway_june.json
+    lab: split_mini_arpg_lab_june.json
+    aspen: split_mini_aspen_june.json
+    classroom: split_mini_classroom_june.json
+    army: split_mini_army_june.json
   radar_type: scRadar         # in [scRadar, ccRadar]
+
   lidar:
     ################### voxel mode ###################
     # pc_range: [0, -15, -5, 15, 15, 5]
@@ -45,7 +45,7 @@ dataset:
     view_cone_mode: True  # whether to use view cone mode
     
   # dataloader config
-  batch_size: 4 #14
+  batch_size: 14
   num_workers: 20
   pin_mem: True
   eval_batch_size: 1
@@ -57,7 +57,7 @@ train:
 
   clip_grad: 10
   start_epoch: 0
-  epochs: 150 
+  epochs: 150
   save_ckpt_freq: 5  # save checkpoint every 5 epochs
   eval_freq: 5  # evaluate every 5 epochs
   lr: null
@@ -65,14 +65,8 @@ train:
   weight_decay: 0.05
   layer_decay: 0.75
   accum_iter: 1
-  # max_epoch: 1
-  # optimizer: Adam
-  # T_max: 10000
-  # eta_min: 1e-6
-  # loss_func: L2
   warmup_epochs: 5
   min_lr: 1e-6
-  # resume: './output/aligned_dataset_kl_d512_m512_l32_mix/aspen_voxel_005_aniso_nrom/checkpoint-149.pth'
   resume: null
 
   dist_on_itp: false
@@ -87,7 +81,7 @@ lidar_ae:
   # latent_std: 1
 
 eval:
-  ckpt: ./result/ckpt/ae_kl_d512_m512_l32_mix_view_cone/indoor_cone_aniso_nrom/checkpoint-149.pth
+  ckpt: path/to/ae/ckpt.pth
   inference:
     num_query_points: 500000
     fps_ratio: 0.0512
@@ -99,11 +93,6 @@ eval:
   exp_name: mix_indoor_inst_only_unfreeze_enc_0619
 
   store_pc: false
-  # save_pc_dir_name: pred_ply_wo_grd_top
-  # save_pc_dir_name: pred_ply_wo_grd_top_query_helper
-  # save_pc_dir_name: pred_ply_query_helper
-  # save_pc_dir_name: pred_ply_query_helper_aug_7e5
-  # save_pc_dir_name: pred_ply_query_12e5_refine_5e5_scale10
   save_pc_dir_name: pred_ply_query_helper_aug_7e5_refine_5e5_scale10
 
 
