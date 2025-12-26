@@ -1,0 +1,46 @@
+root_dir: /data/ruijiezzz/dataset/coloradar
+output_dir: /data/ruijiezzz/dataset/processed_coloradar
+voxel_output_dir: /storage/dataset/zrj/coloradar_voxel_cache
+# voxel_output_dir: /storage/dataset/zrj/coloradar_voxel
+
+split_file: split_indoor_june.json
+split: test
+num_workers: 5
+single_chip_mode:
+  lidar:
+    FOV:
+      max_range: 15.863025538680999
+      az_range: [-90, 90]
+      el_range: [-20, 20]
+    
+    ###### voxel mode #######
+    # pc_range: [0, -15, -5, 15, 15, 5]
+    # voxel_size: [0.05, 0.05, 0.05]
+    ###### voxel mode end #######
+
+    ###### view cone mode #######
+    pc_range: [0, -90, -20, 15.8, 90, 20] # [-r, -az, -el, r, az, el], az and el are in degrees
+    voxel_size: [0.05, 0.25, 0.5]  # [r, az, el], in meters and degrees, [316, 720, 80] max
+    ###### view cone mode #######
+
+    voxel_max_num_points: 10
+    max_voxels: 50000
+
+
+
+  radar:
+    num_range_bins: 128
+    range_bin_width: 0.124905712903
+    config: dataset_preprocessor/config/1843_coloradar_test_set.yml
+    antenna_file_path: dataset_preprocessor/config/antenna_array.txt
+
+    cfar:
+      input_r_dim: 128
+      input_a_dim: 32
+      input_e_dim: 16
+
+      tgt_r_dim: 256
+      tgt_a_dim: 256
+      tgt_e_dim: 128
+
+      cfar_num_point: 8e5

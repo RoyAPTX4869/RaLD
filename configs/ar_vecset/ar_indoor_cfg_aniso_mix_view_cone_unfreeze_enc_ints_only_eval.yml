@@ -1,0 +1,190 @@
+system: 
+  device: cuda:1
+  # device: cuda  # set to 'cuda' for distributed training
+  seed: 1024
+  expname: mix_indoor_inst_only_unfreeze_enc_0619/cfar_12e5_refine_5e5_scale10
+  log_dir: ./result/eval/ar
+  output_dir: ./result/eval/ar
+  distributed: &distributed true # not actually used, use torchrun to run distributed training
+  dist_eval: true
+  mode: eval #train or eval
+
+dataset:
+  dataset_name: AlignedColoRadar
+  root_dir: /data/ruijiezzz/dataset/processed_coloradar
+  # split_file: split_mini_army_june.json
+  split_file: 
+    hallway: split_mini_hallway_june.json
+    lab: split_mini_arpg_lab_june.json
+    aspen: split_mini_aspen_june.json
+    classroom: split_mini_classroom_june.json
+    army: split_mini_army_june.json
+
+  radar_type: scRadar         # in [scRadar, ccRadar], ccRadar not supported yet
+
+  use_cache_latent: &cache false
+  cache_latent_base_dir: /storage/dataset/zrj/RadarAR/latent_cache
+  cache_latent_sub_dir: kl_d512_m512_l32_mix/indoor_aniso_view_cone/
+
+  use_pred_latent: &pred_cache false
+  pred_latent_base_dir: result/generated_results
+  pred_latent_sub_dir: mix_indoor_inst_only_unfreeze_enc_0619
+
+  use_query_helper: &query_helper true
+  query_helper_aug: &query_helper_aug true
+  query_aug_num: &query_aug_num 7e5
+  query_aug_scale: 2
+
+  lidar:
+    # ################### voxel mode ###################
+    # pc_range_cart: [0, -15, -5, 15, 15, 5]
+    # num_point_features_cart: 3
+    # voxel_size_cart: [0.05, 0.05, 0.05]  # [300, 600, 200] max
+    # ################# voxel mode end ###################
+
+    # ################### voxel mode ###################
+    # pc_range_cart: [0, -15.8, -5.4, 15.8,  15.8, 5.4]
+    # num_point_features_cart: 3
+    # voxel_size_cart: [0.05, 0.05, 0.05]  # [300, 600, 200] max
+    # ################# voxel mode end ###################
+
+    ################## view cone mode ##################
+    pc_range: [0, -90, -20, 15.8, 90, 20] # [-r, -az, -el, r, az, el], az and el are in degrees
+    num_point_features: 3
+    voxel_size: [0.05, 0.25, 0.5]  # [r, az, el], in meters and degrees, [316, 720, 80] max
+    ################## view cone mode end ##################
+
+    max_points_per_voxel: 10
+    max_number_of_voxels: 50000
+    sampling: False
+    num_samples: 10000
+    query_ratio: 0.0625
+    norm_isotropy: &norm_iso False   # isotropic along each axis with different scales of each axis
+    norm_anisotropy: &norm_aniso True  # normalize each axis separately with the largest scale
+    # norm_anisotropy: False  # normalize each axis separately with the largest scale
+    cache_voxel: True
+
+    view_cone_mode: True  # whether to use view cone mode
+
+  radar:
+    input_r_dim: 128
+    input_a_dim: 8
+    input_e_dim: 2
+    input_ch: 3
+    upsample: &radar_enc True
+    tgt_r_dim: 128
+    tgt_a_dim: 64
+    tgt_e_dim: 32
+    norm_intensity: True
+    max_intensity: 45 # dB
+    norm_dopp: True
+    max_dopp: 2.4958 # m/s
+
+  # dataloader config
+  batch_size: 8
+  num_workers: 24
+  pin_mem: true
+  eval_batch_size: 1
+  eval_num_workers: 12
+
+train:
+  use_cache_latent: *cache
+  manual_noise_from_vae: false
+  
+  clip_grad: 10
+  start_epoch: 0
+  epochs: &epochs 100 
+  save_ckpt_freq: 10  # save checkpoint every 10 epochs
+  eval_freq: 20  # evaluate every 20 epochs
+  lr: &lr null
+  blr: 1e-4
+  weight_decay: 0.02
+  layer_decay: 0.75
+  accum_iter: 1
+  warmup_epochs: 2
+  min_lr: 1e-6 
+  resume: 'result/ckpt/vecset_baseline/mix_indoor_inst_only_unfreeze_enc_0619/checkpoint-99.pth'
+  # resume: null
+
+  dist_on_itp: false
+  distributed: *distributed
+  world_size: 1
+  local_rank: -1
+  dist_url: env://
+
+
+ar_model:
+  name: kl_d512_m512_l32_d24_edm
+  configs:
+    cond_type: radar
+    categories_num: 5
+    use_radar_cond: true
+    # true for use radar encoder to process radar data, false for use radar cube directly
+    use_radar_enc: *radar_enc   
+    unfreeze_radar_enc: true
+
+    ################# raw radar cube #################
+    input_radar_r_dim: 128
+    input_radar_a_dim: 8
+    input_radar_e_dim: 2
+    input_radar_ch: 2
+    ################ raw radar cube #################
+
+    ################# radar encoder #################
+    enc_radar_r_dim: 8
+    enc_radar_a_dim: 4
+    enc_radar_e_dim: 2
+    enc_radar_ch: 16
+    enc_hidden_ch: 64
+    ################ raw radar cube #################
+    
+    radar_token_channel: 512
+    sos_from_radar: true
+
+    use_radar_dopp: false
+
+lidar_ae:
+  name: kl_d512_m512_l32_mix
+  ckpt: ./result/ckpt/ae_kl_d512_m512_l32_mix_view_cone/indoor_cone_aniso_nrom/checkpoint-149.pth
+  latent_std: 1
+
+radar_enc:
+  name: ae_ch64_mult5_n2_d16
+  ckpt: ./output/aligned_dataset_radar_enc/indoor/checkpoint-50.pth
+
+eval:
+  ckpt: 'result/ckpt/vecset_baseline/mix_indoor_inst_only_unfreeze_enc_0619/checkpoint-99.pth'
+  inference:
+    num_query_points: 500000
+    fps_ratio: 0.0512
+
+    ############## Add query setting ##############
+    query_helper: *query_helper
+    query_helper_aug: *query_helper_aug
+    query_aug_num: *query_aug_num
+
+    refine_query: true
+    refine_query_aug_num: 500000
+    refine_query_scale: 10
+    ############## Add query setting end ##############
+
+  freq: 1
+  use_test_set: true
+
+  store_base_dir: result/generated_results
+  exp_name: mix_indoor_inst_only_unfreeze_enc_0619
+
+  store_latent: false
+  store_pc: true
+
+  save_pc_dir_name: pred_ply_query_helper_aug_7e5_refine_5e5_scale10
+
+  use_pred_latent: *pred_cache
+
+  use_cart_query: false
+
+  ground_removal: false
+
+  iou_test_only: false
+
+  skip_eval_metric: false
