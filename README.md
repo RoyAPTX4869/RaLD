@@ -10,7 +10,7 @@ Please refer to [Installation.md](doc/Installation.md) for installation instruct
 ## Usage
 
 ### Data Preprocessing
-Move `resource/sequences_idx.tar.gz` to the root directory of ColoRadar dataset and extract it. It provides the aligned radar index for each LiDAR frame.
+Move `resource/sequences_idx.tar.gz` and `split_files.tar.gz` to the root directory of ColoRadar dataset and extract it. The former provides the aligned radar index for each LiDAR frame and the latter provides the train/val/test split files.
   
 Preprocess the dataset: 
   - Replace the `root_dir` and `output_dir` in `dataset_preprocessor/config/coloradar_config.yaml` and `dataset_preprocessor/config/coloradar_config_test_set.yaml` accordingly.
@@ -30,7 +30,7 @@ Preprocess the dataset:
     # cache RAE cube with higher resolution for CFAR processing
     python dataset_preprocessor/radar_test_set.py
 
-    # cache the CFAR points
+    # cache the CFAR points for decoding process
     python dataset_preprocessor/cache_test_cfar.py --mode sc
     ```
 
@@ -38,19 +38,22 @@ Preprocess the dataset:
 
 Before running the training scripts, please make sure to adjust the configuration files in the `configs/` directory according to your setup, mainly the dataset paths and checkpoint saving paths.
 
-- Auto-Encoder training & evaluation: 
+- Auto-encoder training & evaluation: 
 
 ```
 scripts/dist_train_ae.sh
 ``` 
 
-- Generation Model training & evaluation: 
+- Generation model training & evaluation: 
 
 ```
 scripts/dist_train_generation.sh
 ```
 
 You can change the config file in the scripts to train/eval with different settings.
+
+## Pretrained Models
+You can download our pretrained models from [Google Drive](https://drive.google.com/drive/folders/1cR4kiaYV2iK59FPk3ECuCDZVb80oH0R2?usp=sharing). Models for auto-encoder and generation model are provided.
 
 ## Citation
 If you find this code useful for your research, please consider citing the following paper:
@@ -65,7 +68,7 @@ If you find this code useful for your research, please consider citing the follo
 ```
 
 ## Acknowledgements
-We thank the following open-source projects for their great work, which has significantly facilitated our research:
+We sincerely thank the following open-source projects for their great work, which has significantly facilitated our research:
 - [3DShape2VecSet](https://github.com/1zb/3DShape2VecSet)
 - [MAR](https://github.com/LTH14/mar)
 - [DiT](https://github.com/facebookresearch/DiT)
