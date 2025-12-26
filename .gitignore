@@ -1,0 +1,16 @@
+libs/
+.vscode/
+__pycache__/
+*.pyc
+output/
+result/
+metrics/
+
+test.py
+test.ipynb
+temp/
+temp_data/
+*.ply
+output
+*.jpg
+test_query.ipynb
