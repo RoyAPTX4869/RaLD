@@ -10,6 +10,9 @@ Please refer to [Installation.md](doc/Installation.md) for installation instruct
 ## Usage
 
 ### Data Preprocessing
+
+The coloradar dataset can be downloaded from [coloradar dataset](https://arpg.github.io/coloradar/). Please follow the instructions on their website to get access to the dataset.
+
 Move `resource/sequences_idx.tar.gz` and `split_files.tar.gz` to the root directory of ColoRadar dataset and extract it. The former provides the aligned radar index for each LiDAR frame and the latter provides the train/val/test split files.
   
 Preprocess the dataset: 
