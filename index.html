@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Primary Meta Tags -->
+  <!-- TODO: Replace with your paper title and author names -->
+  <meta name="title" content="RaLD: Generating High-Resolution 3D Radar Point Clouds with Latent Diffusion - Ruijie Zhang, Bixin Zeng, Shengpeng Wang, Fuhui Zhou, Wei Wang">
+  <!-- TODO: Write a compelling 150-160 character description of your research -->
+  <meta name="description" content="The first work to explore high-resolution 3D radar point cloud generation using latent diffusion models, enhancing radar data quality for improved perception in autonomous systems.">
+  <!-- TODO: Add 5-10 relevant keywords for your research area -->
+  <meta name="keywords" content="mmWave radar, 3D radar point clouds, latent diffusion, machine learning, computer vision, AI">
+  <!-- TODO: List all authors -->
+  <meta name="author" content="Ruijie Zhang, Bixin Zeng, Shengpeng Wang, Fuhui Zhou, Wei Wang">
+  <meta name="robots" content="index, follow">
+  <meta name="language" content="English">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <!-- TODO: Replace with your institution or lab name -->
+  <meta property="og:site_name" content="Huazhong University of Science and Technology, Nanjing University of Aeronautics and Astronautics, Wuhan University">
+  <!-- TODO: Same as paper title above -->
+  <meta property="og:title" content="RaLD: Generating High-Resolution 3D Radar Point Clouds with Latent Diffusion">
+  <!-- TODO: Same as description above -->
+  <meta property="og:description" content="The first work to explore high-resolution 3D radar point cloud generation using latent diffusion models, enhancing radar data quality for improved perception in autonomous systems.">
+  <!-- TODO: Replace with your actual website URL -->
+  <meta property="og:url" content="https://YOUR_DOMAIN.com/YOUR_PROJECT_PAGE">
+  <!-- TODO: Create a 1200x630px preview image and update path -->
+  <meta property="og:image" content="https://YOUR_DOMAIN.com/static/images/social_preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="PAPER_TITLE - Research Preview">
+  <meta property="article:published_time" content="2024-01-01T00:00:00.000Z">
+  <meta property="article:author" content="FIRST_AUTHOR_NAME">
+  <meta property="article:section" content="Research">
+  <meta property="article:tag" content="mmWave radar">
+  <meta property="article:tag" content="3D radar point clouds">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- TODO: Replace with your lab/institution Twitter handle -->
+  <meta name="twitter:site" content="@YOUR_TWITTER_HANDLE">
+  <!-- TODO: Replace with first author's Twitter handle -->
+  <meta name="twitter:creator" content="@AUTHOR_TWITTER_HANDLE">
+  <meta name="twitter:title" content="RaLD: Generating High-Resolution 3D Radar Point Clouds with Latent Diffusion">
+  <meta name="twitter:description" content="RaLD is a latent diffusion model for generating dense and accurate 3D radar point clouds from sparse raw radar spectrum data.">
+  <!-- TODO: Same as social preview image above -->
+  <meta name="twitter:image" content="https://YOUR_DOMAIN.com/static/images/social_preview.png">
+  <meta name="twitter:image:alt" content="RaLD - Research Preview">
+
+  <!-- Academic/Research Specific -->
+  <meta name="citation_title" content="RaLD: Generating High-Resolution 3D Radar Point Clouds with Latent Diffusion">
+  <meta name="citation_author" content="Zhang, Ruijie">
+  <meta name="citation_author" content="Zeng, Bixin">
+  <meta name="citation_author" content="Wang, Shengpeng">
+  <meta name="citation_author" content="Zhou, Fuhui">
+  <meta name="citation_author" content="Wang, Wei">
+  <meta name="citation_publication_date" content="2026">
+  <meta name="citation_conference_title" content="AAAI 2026">
+  <meta name="citation_pdf_url" content="https://YOUR_DOMAIN.com/static/pdfs/AAAI_26_RaLD.pdf">
+  
+  <!-- Additional SEO -->
+  <meta name="theme-color" content="#2563eb">
+  <meta name="msapplication-TileColor" content="#2563eb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://ajax.googleapis.com">
+  <link rel="preconnect" href="https://documentcloud.adobe.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+
+  <!-- TODO: Replace with your paper title and authors -->
+  <title>RaLD: Generating High-Resolution 3D Radar Point Clouds with Latent Diffusion - Ruijie Zhang, Bixin Zeng, Shengpeng Wang, Fuhui Zhou, Wei Wang | Academic Research</title>
+  
+  
+  <!-- Critical CSS - Load synchronously -->
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  
+  <!-- Non-critical CSS - Load asynchronously -->
+  <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/bulma-slider.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  
+  <!-- Fallback for browsers that don't support preload -->
+  <noscript>
+    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  </noscript>
+  
+  <!-- Fonts - Optimized loading -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- MathJax -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        macros: {
+          radarspec: "\\mathbf{R}"
+        }
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <!-- Defer non-critical JavaScript -->
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/bulma-carousel.min.js"></script>
+  <script defer src="static/js/bulma-slider.min.js"></script>
+  <script defer src="static/js/index.js"></script>
+  
+  <!-- Structured Data for Academic Papers -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "PAPER_TITLE",
+    "description": "BRIEF_DESCRIPTION_OF_YOUR_RESEARCH_CONTRIBUTION_AND_FINDINGS",
+    "author": [
+      {
+        "@type": "Person",
+        "name": "FIRST_AUTHOR_NAME",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "INSTITUTION_NAME"
+        }
+      },
+      {
+        "@type": "Person",
+        "name": "SECOND_AUTHOR_NAME",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "INSTITUTION_NAME"
+        }
+      }
+    ],
+    "datePublished": "2024-01-01",
+    "publisher": {
+      "@type": "Organization",
+      "name": "CONFERENCE_OR_JOURNAL_NAME"
+    },
+    "url": "https://YOUR_DOMAIN.com/YOUR_PROJECT_PAGE",
+    "image": "https://YOUR_DOMAIN.com/static/images/social_preview.png",
+    "keywords": ["mmWave radar", "3D radar point clouds", "latent diffusion", "machine learning", "computer vision"],
+    "abstract": "FULL_ABSTRACT_TEXT_HERE",
+    "citation": "BIBTEX_CITATION_HERE",
+    "isAccessibleForFree": true,
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "mainEntity": {
+      "@type": "WebPage",
+      "@id": "https://YOUR_DOMAIN.com/YOUR_PROJECT_PAGE"
+    },
+    "about": [
+      {
+        "@type": "Thing",
+        "name": "RESEARCH_AREA_1"
+      },
+      {
+        "@type": "Thing", 
+        "name": "RESEARCH_AREA_2"
+      }
+    ]
+  }
+  </script>
+  
+  <!-- Website/Organization Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "INSTITUTION_OR_LAB_NAME",
+    "url": "https://YOUR_INSTITUTION_WEBSITE.com",
+    "sameAs": [
+      "https://twitter.com/YOUR_TWITTER_HANDLE",
+      "https://github.com/YOUR_GITHUB_USERNAME"
+    ]
+  }
+  </script>
+</head>
+<body>
+
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+
+
+  <main id="main-content">
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">RaLD: Generating High-Resolution 3D Radar Point Clouds with Latent Diffusion</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="https://royaptx4869.github.io/" target="_blank">Ruijie Zhang</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="#" target="_blank">Bixin Zeng</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="https://shengpeng.wang/" target="_blank">Shengpeng Wang</a><sup>1</sup>,</span>
+              <span class="author-block">
+                <a href="#" target="_blank">Fuhui Zhou</a><sup>2</sup>,</span>
+              <span class="author-block">
+                 <a href="https://metaiot.group/weiwang.html" target="_blank">Wei Wang</a><sup>3</sup>
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup>Huazhong University of Science and Technology,</span>
+              <span class="author-block"><sup>2</sup>Nanjing University of Aeronautics and Astronautics,</span>
+              <span class="author-block"><sup>3</sup>Wuhan University</span>
+            </div>
+
+            <div class="is-size-5 publication-venue">
+              <span class="author-block">AAAI 2026 Oral</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- PDF Link -->
+                <span class="link-block">
+                  <a href="static/pdfs/AAAI_26_RaLD.pdf" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+
+              <!-- arXiv Link -->
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2511.07067" target="_blank"
+                class="external-link button is-normal is-rounded is-dark">
+                <span class="icon">
+                  <i class="ai ai-arxiv"></i>
+                </span>
+                <span>arXiv</span>
+              </a>
+            </span>
+            
+              <!-- Supplementary Link -->
+              <!-- <span class="link-block">
+                <a href="static/pdfs/supplementary_material.pdf" target="_blank"
+                class="external-link button is-normal is-rounded is-dark">
+                <span class="icon">
+                  <i class="fas fa-file-pdf"></i>
+                </span>
+                <span>Supplementary</span>
+              </a>
+            </span> -->
+
+            <!-- Github Link -->
+            <span class="link-block">
+              <a href="https://github.com/RoyAPTX4869/RaLD" target="_blank"
+              class="external-link button is-normal is-rounded is-dark">
+              <span class="icon">
+                <i class="fab fa-github"></i>
+              </span>
+              <span>Code</span>
+            </a>
+          </span>
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Teaser video-->
+<!-- <section class="hero teaser"> -->
+  <!-- <div class="container is-max-desktop"> -->
+    <!-- <div class="hero-body"> -->
+      <!-- TODO: Replace with your teaser video -->
+      <!-- <video poster="" id="tree" autoplay controls muted loop height="100%" preload="metadata"> -->
+        <!-- TODO: Add your video file path here -->
+        <!-- <source src="static/videos/banner_video.mp4" type="video/mp4"> -->
+      <!-- </video> -->
+      <!-- TODO: Replace with your video description -->
+      <!-- <h2 class="subtitle has-text-centered"> -->
+        <!-- Aliquam vitae elit ullamcorper tellus egestas pellentesque. Ut lacus tellus, maximus vel lectus at, placerat pretium mi. Maecenas dignissim tincidunt vestibulum. Sed consequat hendrerit nisl ut maximus.  -->
+      <!-- </h2> -->
+    <!-- </div> -->
+  <!-- </div> -->
+<!-- </section> -->
+<!-- End teaser video -->
+
+<!-- Paper abstract -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Millimeter-wave radar offers a promising sensing modality for autonomous systems thanks to its robustness in adverse conditions and low cost. However, its utility is significantly limited by the sparsity and low resolution of radar point clouds, which poses challenges for tasks requiring dense and accurate 3D perception. Despite that recent efforts have shown great potential by exploring generative approaches to address this issue, they often rely on dense voxel representations that are inefficient and struggle to preserve structural detail. To fill this gap, we make the key observation that latent diffusion models (LDMs), though successful in other modalities, have not been effectively leveraged for radar-based 3D generation due to a lack of compatible representations and conditioning strategies. We introduce RaLD, a framework that bridges this gap by integrating scene-level frustum-based LiDAR autoencoding, order-invariant latent representations, and direct radar spectrum conditioning. These insights lead to a more compact and expressive generation process. Experiments show that RaLD produces dense and accurate 3D point clouds from raw radar spectrums, offering a promising solution for robust perception in challenging environments.
+          </p>
+        </div>
+          <img src="static/images/intro.png" alt="RaLD Method Overview" style="width: 100%; height: auto; border-radius: 10px; margin-bottom: 1em;">
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
+
+
+<!-- Method Overview -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Method Overview</h2>
+        <div class="content has-text-justified">
+          <p>
+            Overview of the RaLD framework. Given an input radar spectrum $\radarspec{}$, RaLD aims to 
+            generate a dense and accurate 3D point clouds $\mathbf{P}\in \mathbb{R}^{N \times 3}$ that reconstruct the 
+            scene with LiDAR-like fidelity. We adopt a conditional diffusion framework that learns to synthesize point clouds conditioned on radar observations.
+          <p>
+          <p></p>
+            To achieve this, RaLD operates in a compact latent space, where a
+            diffusion model is trained to generate point cloud embeddings guided by the
+            radar spectrum. The overall pipeline, as illustrated below,
+            begins with an autoencoder that compresses LiDAR point clouds into structured latent
+            codes. A radar-conditioned latent diffusion model then samples from this space, and
+            a decoder reconstructs the final 3D point clouds guided by radar priors.
+          </p>
+          <img src="static/images/system_overview.png" alt="RaLD Method Overview" style="width: 100%; height: auto; border-radius: 10px; margin-bottom: 1em;">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End Method Overview -->
+
+
+<!-- Image carousel -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container" style="max-width: 800px;">
+      <div id="results-carousel" class="carousel results-carousel">
+       <div class="item">
+        <!-- TODO: Replace with your research result images -->
+        <img src="static/images/frustrum0_small.png" alt="First research result visualization" loading="lazy"/>
+        <!-- TODO: Replace with description of this result -->
+        <h2 class="subtitle has-text-centered">
+          Frustum-Based Point Cloud Auto-Encoder.
+        </h2>
+      </div>
+      <div class="item">
+        <!-- Your image here -->
+        <img src="static/images/order_invariant2.png" alt="Second research result visualization" loading="lazy"/>
+        <h2 class="subtitle has-text-centered">
+          Order-Invariant Latent Coding.
+        </h2>
+      </div>
+  </div>
+</div>
+</div>
+</section>
+<!-- End image carousel -->
+
+
+<!-- Visualizations -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Visualizations</h2>
+        <div class="content has-text-justified">
+          <img src="static/images/gallery_ae.png" alt="Vis AE" style="width: 100%; height: auto; border-radius: 10px; margin-bottom: 1em;">
+          <h2 class="subtitle has-text-centered is-size-6" style="margin-bottom: 3em;">
+              Reconstructed 3D radar point clouds from auto-encoder.
+          </h2>
+
+          <img src="static/images/gallery3.png" alt="Vis Generation" style="width: 100%; height: auto; border-radius: 10px; margin-bottom: 1em;">
+          <h2 class="subtitle has-text-centered is-size-6">
+              End-to-end generated 3D radar point clouds from radar spectrums.
+          </h2>
+
+        </div>
+
+        <div class="columns is-centered is-multiline">
+          <div class="column is-6">
+            <video poster="" id="video1" autoplay controls muted loop playsinline width="100%">
+              <source src="static/videos/army_0000_compressed.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="column is-6">
+            <video poster="" id="video2" autoplay controls muted loop playsinline width="100%">
+              <source src="static/videos/aspen_0000_compressed.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="column is-6">
+            <video poster="" id="video3" autoplay controls muted loop playsinline width="100%">
+              <source src="static/videos/classroom_0443_compressed.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="column is-6">
+            <video poster="" id="video4" autoplay controls muted loop playsinline width="100%">
+              <source src="static/videos/hallway_0430_compressed.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="column is-6">
+            <video poster="" id="video5" autoplay controls muted loop playsinline width="100%">
+              <source src="static/videos/lab_0000_compressed.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+  </div>
+</section>
+<!-- End Visualizations -->
+
+<!-- Youtube video -->
+<!-- <section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <!-* Paper video. *->
+      <h2 class="title is-3">Video Presentation</h2>
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          
+          <div class="publication-video">
+            <!-* TODO: Replace with your YouTube video ID *->
+            <iframe src="https://www.youtube.com/embed/JkaxUblCGz0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+<!-- End youtube video -->
+
+
+<!-- Video carousel -->
+<!-- <section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Another Carousel</h2>
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-video1">
+          <!-* TODO: Add poster image for better preview *->
+          <video poster="" id="video1" controls muted loop height="100%" preload="metadata">
+            <!-* Your video file here *->
+            <source src="static/videos/carousel1.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-video2">
+          <!-* TODO: Add poster image for better preview *->
+          <video poster="" id="video2" controls muted loop height="100%" preload="metadata">
+            <!-* Your video file here *->
+            <source src="static/videos/carousel2.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-video3">
+          <!-* TODO: Add poster image for better preview *->
+          <video poster="" id="video3" controls muted loop height="100%" preload="metadata">
+            <!-* Your video file here *->
+            <source src="static/videos/carousel3.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+<!-- End video carousel -->
+
+
+
+
+
+
+<!-- Paper poster -->
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title">Poster</h2>
+
+      <!-- TODO: Replace with your poster PDF -->
+      <iframe  src="static/pdfs/sample.pdf" width="100%" height="550">
+          </iframe>
+        
+      </div>
+    </div>
+  </section>
+<!--End paper poster -->
+
+
+
+<!--BibTex citation -->
+  <section class="section" id="BibTeX">
+<section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <div class="bibtex-header">
+        <h2 class="title">BibTeX</h2>
+        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+          <i class="fas fa-copy"></i>
+          <span class="copy-text">Copy</span>
+        </button>
+      </div>
+      <pre id="bibtex-code"><code>
+        @article{zhang2025rald,
+        title={RaLD: Generating High-Resolution 3D Radar Point Clouds with Latent Diffusion},
+        author={Zhang, Ruijie and Zeng, Bixin and Wang, Shengpeng and Zhou, Fuhui and Wang, Wei},
+        journal={arXiv preprint arXiv:2511.07067},
+        year={2025}
+        }
+    </div>
+</section>
+<!--End BibTex citation -->
+
+
+  <footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank"> as template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Statcounter tracking code -->
+  
+<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+
+    <!-- End of Statcounter Code -->
+
+  </body>
+  </html>
